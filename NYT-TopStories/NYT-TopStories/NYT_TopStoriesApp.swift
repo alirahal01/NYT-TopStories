@@ -7,9 +7,15 @@
 
 import SwiftUI
 
+struct URLConstants {
+     static let baseUrl = "https://api.nytimes.com"
+     static let top_stories_url = "/svc/topstories/v2/"
+}
+
 @main
 struct NYT_TopStoriesApp: App {
     var body: some Scene {
+        let networkService = NetworkService(baseURLString: "https://api.nytimes.com/svc/topstories/v2/")
         WindowGroup {
             ContentView()
         }
