@@ -21,19 +21,31 @@ class NetworkService: NetworkServiceable {
         self.urlSession = urlSession
         self.baseURLString = baseURLString
     }
+    
+    internal  func getArticles() -> AnyPublisher<[Article], Never> {
+        let section = "home"
+        let url = "\(URLConstants.baseUrl)\(URLConstants.top_stories_url)\(section).json"
 
-    func getArticles() -> AnyPublisher<[Article], Never> {
+        guard var components = URLComponents(string: url) else {
+            print("Error: cannot create URLComponents")
+            return Just<[Article]>([]).eraseToAnyPublisher()
+        }
+        components.queryItems = [URLQueryItem(name: "api-key", value: "ye9Qka4i7xQlUmH8ckem3ohhu6JucArD")]
 
-        let urlString = baseURLString + "arts"
-
-        guard let url = URL(string: urlString) else {
+        guard let url = components.url else {
+            print("Error: cannot create URL")
             return Just<[Article]>([]).eraseToAnyPublisher()
         }
 
-        return urlSession.dataTaskPublisher(for: url)
-            .map { $0.data }
-            .decode(type: [Article].self, decoder: JSONDecoder())
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: APIResponse.self, decoder: JSONDecoder())
+            .map { $0.articles ?? [] }
             .replaceError(with: [])
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }

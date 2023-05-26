@@ -8,19 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @ObservedObject var viewModel: ArticlesViewModel
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        
+        VStack(alignment: .leading) {
+            List {
+                ForEach(viewModel.articles.indices, id: \.self) { index in
+                    let article = viewModel.articles[index]
+                    VStack(alignment: .leading,spacing: 12) {
+                        Text(article.title!)
+                    }
+                }
+            }
         }
         .padding()
+        .onAppear {
+            viewModel.LoadData()
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

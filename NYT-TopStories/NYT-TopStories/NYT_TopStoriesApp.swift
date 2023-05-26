@@ -16,8 +16,9 @@ struct URLConstants {
 struct NYT_TopStoriesApp: App {
     var body: some Scene {
         let networkService = NetworkService(baseURLString: "https://api.nytimes.com/svc/topstories/v2/")
+        let viewModel = ArticlesViewModel(networkService: networkService)
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: viewModel)
         }
     }
 }
