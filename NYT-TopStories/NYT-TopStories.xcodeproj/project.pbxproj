@@ -106,11 +106,11 @@
 		9F5A73A52A20046000757D4E /* NYT-TopStories */ = {
 			isa = PBXGroup;
 			children = (
+				9F5A73E02A2127B400757D4E /* Screen */,
 				9F5A73DD2A20287F00757D4E /* ViewModel */,
 				9F5A73D32A2012A200757D4E /* Models */,
 				9F5A73D02A20128200757D4E /* NetworkService */,
 				9F5A73A62A20046000757D4E /* NYT_TopStoriesApp.swift */,
-				9F5A73A82A20046000757D4E /* ContentView.swift */,
 				9F5A73AA2A20046200757D4E /* Assets.xcassets */,
 				9F5A73AC2A20046200757D4E /* Preview Content */,
 			);
@@ -167,6 +167,14 @@
 				9F5A73DE2A2028B700757D4E /* ArticlesListViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		9F5A73E02A2127B400757D4E /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				9F5A73A82A20046000757D4E /* ContentView.swift */,
+			);
+			path = Screen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

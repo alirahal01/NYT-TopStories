@@ -14,9 +14,10 @@ struct Article: Codable {
     var shortURL: String?
     var authors: [String]?
     var multimedia: [Multimedia]?
-    
+    /// Publication date of the article.
+    let publishedDate: String?
     private enum CodingKeys : String, CodingKey {
-        case title, authors = "perFacet", abstract, url, shortURL, multimedia
+        case title, authors = "perFacet", abstract, url, shortURL, multimedia, publishedDate = "published_date"
     }
     
 }
