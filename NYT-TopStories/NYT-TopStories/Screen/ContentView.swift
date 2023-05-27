@@ -12,46 +12,56 @@ struct ContentView: View {
     @ObservedObject var viewModel: ArticlesViewModel
     
     var body: some View {
+        let state = viewModel.state
         
-        List {
-            ForEach(viewModel.articles.indices, id: \.self) { index in
-                let article = viewModel.articles[index]
-                HStack {
-                    if let imageURL = article.multimedia?[2].url, let url = URL(string: imageURL) {
-                        AsyncImage(url: url) { image in
-                            image
+        switch state {
+        case . idle:
+            Color.clear.onAppear(perform: viewModel.LoadData)
+        case .loading:
+            ProgressView()
+                .imageScale(.large)
+        case .success(let loadingViewModel):
+            List {
+                ForEach(loadingViewModel.articlesData.indices, id: \.self) { index in
+                    let article = loadingViewModel.articlesData[index]
+                    HStack {
+                        if let imageURL = article.imageURL, let url = URL(string: imageURL) {
+                            AsyncImage(url: url) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 80, height: 80)
+                            } placeholder: {
+                                // Placeholder image or loading indicator
+                                ProgressView()
+                            }
+                        } else {
+                            Image(systemName: "􀏅")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 80, height: 80)
-                        } placeholder: {
-                            // Placeholder image or loading indicator
-                            ProgressView()
                         }
-                    } else {
-                        Image(systemName: "photo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 80, height: 80)
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text(article.title ?? "")
-                            .font(.subheadline)
                         
-                        Spacer()
-                        Text(article.publishedDate ?? "")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                        VStack(alignment: .leading) {
+                            Text(article.title ?? "")
+                                .font(.subheadline)
+                            
+                            Spacer()
+                            Text(article.publishedDate ?? "")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(5)
                     }
-                    .padding(5)
-                }
-                .listRowSeparator(.hidden)
+                    .listRowSeparator(.hidden)
 
+                }
+                
             }
-            
-        }
-        .onAppear {
-            viewModel.LoadData()
+        case .failed(let errorViewModel):
+            Color.clear.alert(isPresented: $viewModel.showErrorAlert) {
+                Alert(title: Text("Error"), message: Text(errorViewModel.message), dismissButton: .default(Text("OK")))
+            }
         }
     }
 }

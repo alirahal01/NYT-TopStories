@@ -9,15 +9,19 @@ import Foundation
 
 // MARK: - Article
 struct Article: Codable {
-    var title, abstract: String?
+    let id : Int?
+    var title: String?
     var url: String?
     var shortURL: String?
     var authors: [String]?
     var multimedia: [Multimedia]?
+    
     /// Publication date of the article.
     let publishedDate: String?
+    var abstract: String?
+    
     private enum CodingKeys : String, CodingKey {
-        case title, authors = "perFacet", abstract, url, shortURL, multimedia, publishedDate = "published_date"
+        case id, title, authors = "perFacet", abstract, url, shortURL, multimedia, publishedDate = "published_date"
     }
     
 }
