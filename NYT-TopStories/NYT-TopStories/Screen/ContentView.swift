@@ -22,7 +22,7 @@ struct ContentView: View {
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 50, height: 50)
+                                .frame(width: 80, height: 80)
                         } placeholder: {
                             // Placeholder image or loading indicator
                             ProgressView()
@@ -31,9 +31,9 @@ struct ContentView: View {
                         Image(systemName: "photo")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 80, height: 80)
                     }
-                    Spacer()
+                    
                     VStack(alignment: .leading) {
                         Text(article.title ?? "")
                             .font(.subheadline)
@@ -43,8 +43,12 @@ struct ContentView: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
+                    .padding(5)
                 }
+                .listRowSeparator(.hidden)
+
             }
+            
         }
         .onAppear {
             viewModel.LoadData()
