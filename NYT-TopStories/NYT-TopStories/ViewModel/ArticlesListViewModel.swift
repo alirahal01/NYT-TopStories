@@ -15,7 +15,7 @@ class ArticlesViewModel: ObservableObject {
     private let networkService: NetworkServiceable
     @Published var articlesData: [ArticleData] = []
     @Published private(set) var state: LoadingState<LoadedViewModel> = .idle
-    @State var showErrorAlert = false
+    @Published var showErrorAlert = false
     
     init(networkService: NetworkServiceable) {
         self.networkService = networkService

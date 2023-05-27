@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol NetworkServiceable {
-    func getArticles() -> AnyPublisher<[Article], Never>
+    func getArticles() -> AnyPublisher<[Article], ErrorViewModel>
 }
 
 class NetworkService: NetworkServiceable {
@@ -22,19 +22,23 @@ class NetworkService: NetworkServiceable {
         self.baseURLString = baseURLString
     }
     
-    internal  func getArticles() -> AnyPublisher<[Article], Never> {
+    internal  func getArticles() -> AnyPublisher<[Article], ErrorViewModel> {
         let section = "home"
         let url = "\(URLConstants.baseUrl)\(URLConstants.top_stories_url)\(section).json"
 
         guard var components = URLComponents(string: url) else {
             print("Error: cannot create URLComponents")
-            return Just<[Article]>([]).eraseToAnyPublisher()
+            return Just<[Article]>([])
+                .setFailureType(to: ErrorViewModel.self)
+                .eraseToAnyPublisher()
         }
         components.queryItems = [URLQueryItem(name: "api-key", value: "ye9Qka4i7xQlUmH8ckem3ohhu6JucArD")]
 
         guard let url = components.url else {
             print("Error: cannot create URL")
-            return Just<[Article]>([]).eraseToAnyPublisher()
+            return Just<[Article]>([])
+                .setFailureType(to: ErrorViewModel.self)
+                .eraseToAnyPublisher()
         }
 
         var request = URLRequest(url: url)
@@ -44,7 +48,7 @@ class NetworkService: NetworkServiceable {
             .map(\.data)
             .decode(type: APIResponse.self, decoder: JSONDecoder())
             .map { $0.articles ?? [] }
-            .replaceError(with: [])
+            .mapError { ErrorViewModel(message: $0.localizedDescription) }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

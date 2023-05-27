@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ErrorViewModel: Equatable {
+struct ErrorViewModel: Equatable, Error {
     let message: String
     
     static func == (lhs: ErrorViewModel, rhs: ErrorViewModel) -> Bool {
