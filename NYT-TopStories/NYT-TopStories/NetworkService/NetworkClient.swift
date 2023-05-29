@@ -11,7 +11,7 @@ import Combine
 protocol NetworkClient {
     var requestBuilder: URLRequestConvertible { get }
     var requestExecutor: NetworkRequestExecutable { get }
-    func fetchData(section: Section) -> AnyPublisher<Data,Error>
+    func fetchData<T: Decodable>(section: Section) -> AnyPublisher<T,Error>
 }
 
 struct DefaultNetworkClient: NetworkClient {
@@ -24,11 +24,14 @@ struct DefaultNetworkClient: NetworkClient {
         self.requestExecutor = requestExecutor
     }
     
-    func fetchData(section: Section) -> AnyPublisher<Data,Error> {
+    func fetchData<T: Decodable>(section: Section) -> AnyPublisher<T,Error> {
         do {
             let request = try requestBuilder.urlRequest(section: .home)
             return requestExecutor.executeRequest(request: request)
-        } catch { 
+                .decode(type: T.self, decoder: JSONDecoder())
+                .mapError { ErrorViewModel(message: $0.localizedDescription) }
+                .eraseToAnyPublisher()
+        } catch {
             return Fail(error: error).eraseToAnyPublisher()
         }
     }

@@ -30,9 +30,6 @@ class ArticlesViewModel: ObservableObject {
         articlesPublisher =
         networkService
             .fetchData(section: .home)
-            .decode(type: APIResponse.self, decoder: JSONDecoder())
-            .map { $0.articles ?? [] }
-            .mapError { ErrorViewModel(message: $0.localizedDescription) }
             .sink { [weak self] completion in
             if case .failure(let error) = completion {
                 DispatchQueue.main.async {
@@ -41,8 +38,9 @@ class ArticlesViewModel: ObservableObject {
                 }
                 
             }
-        } receiveValue: { [weak self] articles in
-            if articles.count != 0 {
+            } receiveValue: { [weak self] (response: APIResponse) in
+                let articles = response.articles ?? []
+                if articles.count != 0 {
                 let articlesData = articles.map { ArticleData(id: $0.id, title: $0.title, caption: $0.abstract, imageURL: $0.multimedia?[2].url, publishedDate: $0.publishedDate)}
                 DispatchQueue.main.async {
                     self?.articlesData = articlesData
