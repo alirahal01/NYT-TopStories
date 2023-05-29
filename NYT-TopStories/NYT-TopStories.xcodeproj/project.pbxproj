@@ -22,6 +22,11 @@
 		9F5A73DF2A2028B700757D4E /* ArticlesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A73DE2A2028B700757D4E /* ArticlesListViewModel.swift */; };
 		9F5A73E22A226AFD00757D4E /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A73E12A226AFD00757D4E /* LoadingState.swift */; };
 		9F5A73E42A226B1F00757D4E /* ErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A73E32A226B1F00757D4E /* ErrorViewModel.swift */; };
+		9FC9C94A2A22DBEC009DC8C4 /* DataLoadError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9C9492A22DBEC009DC8C4 /* DataLoadError.swift */; };
+		9FC9C94D2A22E17B009DC8C4 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9C94C2A22E17B009DC8C4 /* RequestBuilder.swift */; };
+		9FC9C94F2A22E1DA009DC8C4 /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9C94E2A22E1DA009DC8C4 /* RequestExecutor.swift */; };
+		9FC9C9512A22E1EF009DC8C4 /* RequestParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9C9502A22E1EF009DC8C4 /* RequestParser.swift */; };
+		9FC9C9532A22ED23009DC8C4 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9C9522A22ED23009DC8C4 /* NetworkClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +65,11 @@
 		9F5A73DE2A2028B700757D4E /* ArticlesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesListViewModel.swift; sourceTree = "<group>"; };
 		9F5A73E12A226AFD00757D4E /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
 		9F5A73E32A226B1F00757D4E /* ErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewModel.swift; sourceTree = "<group>"; };
+		9FC9C9492A22DBEC009DC8C4 /* DataLoadError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoadError.swift; sourceTree = "<group>"; };
+		9FC9C94C2A22E17B009DC8C4 /* RequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
+		9FC9C94E2A22E1DA009DC8C4 /* RequestExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestExecutor.swift; sourceTree = "<group>"; };
+		9FC9C9502A22E1EF009DC8C4 /* RequestParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestParser.swift; sourceTree = "<group>"; };
+		9FC9C9522A22ED23009DC8C4 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,7 +159,12 @@
 		9F5A73D02A20128200757D4E /* NetworkService */ = {
 			isa = PBXGroup;
 			children = (
+				9FC9C94B2A22DF7E009DC8C4 /* RequestBuilder */,
 				9F5A73D12A20128E00757D4E /* NetworkService.swift */,
+				9FC9C9492A22DBEC009DC8C4 /* DataLoadError.swift */,
+				9FC9C94E2A22E1DA009DC8C4 /* RequestExecutor.swift */,
+				9FC9C9502A22E1EF009DC8C4 /* RequestParser.swift */,
+				9FC9C9522A22ED23009DC8C4 /* NetworkClient.swift */,
 			);
 			path = NetworkService;
 			sourceTree = "<group>";
@@ -181,6 +196,14 @@
 				9F5A73A82A20046000757D4E /* ContentView.swift */,
 			);
 			path = Screen;
+			sourceTree = "<group>";
+		};
+		9FC9C94B2A22DF7E009DC8C4 /* RequestBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				9FC9C94C2A22E17B009DC8C4 /* RequestBuilder.swift */,
+			);
+			path = RequestBuilder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -315,11 +338,16 @@
 			files = (
 				9F5A73A92A20046000757D4E /* ContentView.swift in Sources */,
 				9F5A73DC2A2012F100757D4E /* Sections.swift in Sources */,
+				9FC9C9512A22E1EF009DC8C4 /* RequestParser.swift in Sources */,
 				9F5A73D22A20128E00757D4E /* NetworkService.swift in Sources */,
+				9FC9C94F2A22E1DA009DC8C4 /* RequestExecutor.swift in Sources */,
+				9FC9C94D2A22E17B009DC8C4 /* RequestBuilder.swift in Sources */,
+				9FC9C94A2A22DBEC009DC8C4 /* DataLoadError.swift in Sources */,
 				9F5A73DA2A2012E300757D4E /* Article.swift in Sources */,
 				9F5A73D62A2012C700757D4E /* Multimedia.swift in Sources */,
 				9F5A73DF2A2028B700757D4E /* ArticlesListViewModel.swift in Sources */,
 				9F5A73E22A226AFD00757D4E /* LoadingState.swift in Sources */,
+				9FC9C9532A22ED23009DC8C4 /* NetworkClient.swift in Sources */,
 				9F5A73E42A226B1F00757D4E /* ErrorViewModel.swift in Sources */,
 				9F5A73D82A2012D200757D4E /* APIResponse.swift in Sources */,
 				9F5A73A72A20046000757D4E /* NYT_TopStoriesApp.swift in Sources */,
