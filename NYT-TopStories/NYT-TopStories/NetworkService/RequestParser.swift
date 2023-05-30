@@ -8,16 +8,16 @@
 import Foundation
 
 protocol NetworkResponseParseable {
-    func parseResponse<T: Decodable>(data: Data) -> Result<T, Error>
+    func parseResponse<T: Decodable>(data: Data) -> Result<T, ErrorViewModel>
 }
 
 struct MyResponseParser: NetworkResponseParseable {
-    func parseResponse<T: Decodable>(data: Data) -> Result<T, Error> {
+    func parseResponse<T: Decodable>(data: Data) -> Result<T, ErrorViewModel> {
         do {
             let decodedObject = try JSONDecoder().decode(T.self, from: data)
             return .success(decodedObject)
         } catch {
-            return .failure(error)
+            return .failure(ErrorViewModel(message: error.localizedDescription))
         }
     }
 }

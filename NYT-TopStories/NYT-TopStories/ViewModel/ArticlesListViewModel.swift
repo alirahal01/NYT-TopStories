@@ -11,7 +11,7 @@ import SwiftUI
 
 class ArticlesViewModel: ObservableObject {
     
-    private var articlesPublisher: AnyCancellable?
+    private var cancellable: AnyCancellable?
     private let networkService: NetworkClient
     @Published var articlesData: [ArticleData] = []
     @Published private(set) var state: LoadingState<LoadedViewModel> = .idle
@@ -25,12 +25,8 @@ class ArticlesViewModel: ObservableObject {
         guard state != .loading else {
             return
         }
-
         state = .loading
-        articlesPublisher =
-        networkService
-            .fetchData(section: .home)
-            .sink { [weak self] completion in
+        cancellable = networkService.fetchData(section: .home).sink { [weak self] completion in
             if case .failure(let error) = completion {
                 DispatchQueue.main.async {
                     self?.showErrorAlert = true
@@ -38,33 +34,24 @@ class ArticlesViewModel: ObservableObject {
                 }
                 
             }
-            } receiveValue: { [weak self] (response: APIResponse) in
+        } receiveValue: { [weak self] (result: Result<APIResponse, ErrorViewModel>) in
+            switch result {
+            case .success(let response):
                 let articles = response.articles ?? []
                 if articles.count != 0 {
-                let articlesData = articles.map { ArticleData(id: $0.id, title: $0.title, caption: $0.abstract, imageURL: $0.multimedia?[2].url, publishedDate: $0.publishedDate)}
-                DispatchQueue.main.async {
-                    self?.articlesData = articlesData
-                    self?.state = .success(LoadedViewModel(id: UUID().uuidString, articlesData: articlesData))
+                    let articlesData = articles.map { ArticleData(id: $0.id, title: $0.title, caption: $0.abstract, imageURL: $0.multimedia?[2].url, publishedDate: $0.publishedDate)}
+                    DispatchQueue.main.async {
+                        self?.articlesData = articlesData
+                        self?.state = .success(LoadedViewModel(id: UUID().uuidString, articlesData: articlesData))
+                    }
+                }
+                case .failure(let error):
+                    print("Error: \(error)")
                 }
             }
-
         }
-//        articlesPublisher = networkService.getArticles().receive(on: DispatchQueue.main).sink { [weak self] completion in
-//            if case .failure(let error) = completion {
-//                self?.showErrorAlert = true
-//                self?.state = .failed(ErrorViewModel(message: error.localizedDescription))
-//            }
-//        } receiveValue: { [weak self] articles in
-//            if articles.count != 0 {
-//                let articlesData = articles.map { ArticleData(id: $0.id, title: $0.title, caption: $0.abstract, imageURL: $0.multimedia?[2].url, publishedDate: $0.publishedDate)}
-//                self?.articlesData = articlesData
-//                self?.state = .success(LoadedViewModel(id: UUID().uuidString, articlesData: articlesData))
-//            }
-//
-//        }
+        
     }
-    
-}
 
 extension ArticlesViewModel {
     struct ArticleData: Identifiable {

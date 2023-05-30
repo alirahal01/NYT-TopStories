@@ -23,7 +23,8 @@ struct NYT_TopStoriesApp: App {
         let url = URL(string: "https://api.nytimes.com") ?? fallBackURL
         let requestBuilder = RequestBuilder(baseURL: url, path: Path(components: ["svc","topstories","v2"]), httpMethod: .get,queryItems: queryItems)
         let requestExecutor = URLSessionNetworkRequestExecutor()
-        let networkService = DefaultNetworkClient(requestBuilder: requestBuilder, requestExecutor: requestExecutor)
+        let requestParser = MyResponseParser()
+        let networkService = DefaultNetworkClient(requestBuilder: requestBuilder, requestExecutor: requestExecutor, requestParser: requestParser)
         let viewModel = ArticlesViewModel(networkService: networkService)
         WindowGroup {
             ContentView(viewModel: viewModel)
