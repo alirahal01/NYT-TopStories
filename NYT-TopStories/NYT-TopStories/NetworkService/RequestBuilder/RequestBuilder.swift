@@ -8,7 +8,7 @@
 import Foundation
 
 protocol URLRequestConvertible {
-    func urlRequest(section: Section) throws -> URLRequest
+    func urlRequest() throws -> URLRequest
 }
 
 enum HTTPMethod: String {
@@ -31,8 +31,8 @@ struct RequestBuilder: URLRequestConvertible {
         self.queryItems = queryItems
     }
     
-    func urlRequest(section: Section) throws -> URLRequest {
-        let url = "\(baseURL.appendingPathComponent(path.stringValue))\(section).json"
+    func urlRequest() throws -> URLRequest {
+        let url = "\(baseURL.appendingPathComponent(path.stringValue))"
         var components = URLComponents(url: URL(string: url)!, resolvingAgainstBaseURL: true)
         components?.queryItems = queryItems
         
@@ -52,13 +52,7 @@ struct Path {
     let components: [String]
     
     var stringValue: String {
-        var pathString = components.joined(separator: "/")
-        
-        // Ensure the path ends with a forward slash
-        if !pathString.hasSuffix("/") {
-            pathString += "/"
-        }
-        
+        let pathString = components.joined(separator: "/")
         return pathString
     }
 }

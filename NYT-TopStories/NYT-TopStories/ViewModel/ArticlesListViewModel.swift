@@ -12,21 +12,31 @@ import SwiftUI
 class ArticlesViewModel: ObservableObject {
     
     private var cancellable: AnyCancellable?
-    private let networkService: NetworkClient
+    private let networkService: NetworkClient?
     @Published var articlesData: [ArticleData] = []
     @Published private(set) var state: LoadingState<LoadedViewModel> = .idle
     @Published var showErrorAlert = false
     
-    init(networkService: NetworkClient) {
+    init(networkService: NetworkClient? = nil) {
         self.networkService = networkService
     }
     
-    func LoadData() {
+    func LoadData(section: Section? = nil) {
         guard state != .loading else {
             return
         }
         state = .loading
-        cancellable = networkService.fetchData(section: .home).sink { [weak self] completion in
+        let queryItems = [
+            URLQueryItem(name: "api-key", value: "ye9Qka4i7xQlUmH8ckem3ohhu6JucArD"),
+        ]
+        let fallBackURL = URL(string: URLConstants.baseUrl)!
+        guard let section = section else { return }
+        let url = URL(string: URLConstants.baseUrl) ?? fallBackURL
+        let requestBuilder = RequestBuilder(baseURL: url, path: Path(components: ["svc","topstories","v2","\(section.rawValue).json"]), httpMethod: .get,queryItems: queryItems)
+        let requestExecutor = URLSessionNetworkRequestExecutor()
+        let requestParser = MyResponseParser()
+        let networkService = DefaultNetworkClient(requestBuilder: requestBuilder, requestExecutor: requestExecutor, requestParser: requestParser)
+        cancellable = networkService.fetchData().sink { [weak self] completion in
             if case .failure(let error) = completion {
                 DispatchQueue.main.async {
                     self?.showErrorAlert = true

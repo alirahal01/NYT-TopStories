@@ -16,7 +16,7 @@ struct ContentView: View {
         
         switch state {
         case . idle:
-            Color.clear.onAppear(perform: viewModel.LoadData)
+            Color.clear.onAppear(perform: { viewModel.LoadData(section: .home) })
         case .loading:
             ProgressView()
                 .imageScale(.large)

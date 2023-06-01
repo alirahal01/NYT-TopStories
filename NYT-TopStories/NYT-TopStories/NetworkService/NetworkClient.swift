@@ -12,7 +12,7 @@ protocol NetworkClient {
     var requestBuilder: URLRequestConvertible { get }
     var requestExecutor: NetworkRequestExecutable { get }
     var requestParser: NetworkResponseParseable { get }
-    func fetchData<T: Decodable>(section: Section) -> AnyPublisher<Result<T, ErrorViewModel>, ErrorViewModel>
+    func fetchData<T: Decodable>() -> AnyPublisher<Result<T, ErrorViewModel>, ErrorViewModel>
 }
 
 struct DefaultNetworkClient: NetworkClient {
@@ -27,9 +27,9 @@ struct DefaultNetworkClient: NetworkClient {
         self.requestParser = requestParser
     }
     
-    func fetchData<T: Decodable>(section: Section) -> AnyPublisher<Result<T, ErrorViewModel>, ErrorViewModel> {
+    func fetchData<T: Decodable>() -> AnyPublisher<Result<T, ErrorViewModel>, ErrorViewModel> {
         do {
-            let request = try requestBuilder.urlRequest(section: .home)
+            let request = try requestBuilder.urlRequest()
             return requestExecutor.executeRequest(request: request)
                 .map { data in
                     requestParser.parseResponse(data: data)
